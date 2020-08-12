@@ -3,7 +3,7 @@ package ru.art241111.graphicaltoolforkawasaki.repository
 import kawasakiRobots.KawasakiRobot
 
 class RepositoryForRobotApi {
-    private val robot = KawasakiRobot()
+    private val robot = KawasakiRobot(address = "192.168.31.1")
 
     init {
         robot.robotInfo
