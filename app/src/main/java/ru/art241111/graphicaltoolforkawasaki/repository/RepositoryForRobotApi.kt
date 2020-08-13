@@ -1,19 +1,14 @@
 package ru.art241111.graphicaltoolforkawasaki.repository
 
-import kawasakiRobots.KawasakiRobot
+import ru.art241111.graphicaltoolforkawasaki.repository.robotAPI.KawasakiRobot
+import kotlin.concurrent.thread
 
 class RepositoryForRobotApi {
-    private val robot = KawasakiRobot(address = "192.168.31.1")
+    private val robot = KawasakiRobot(address = "192.168.31.63")
 
-    init {
-        robot.robotInfo
-    }
     fun updateInfoAboutPosition() =
         robot.service.updateInfoAboutPosition()
 
-    fun switchRobotOff(){
-        robot.switchRobotOff()
-    }
     fun turnOnTheMotors() =
         robot.service.turnOnTheMotors()
 
@@ -26,6 +21,9 @@ class RepositoryForRobotApi {
     fun moveByY(position: Int) =
         robot.moving.moveByY(position)
 
+    fun disconnect(){
+        robot.disconnect()
+    }
     fun moveByZ(position: Int) =
         robot.moving.moveByZ(position)
 

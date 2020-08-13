@@ -32,20 +32,66 @@ class ArrowControlsFragmentXYZ : Fragment() {
                 R.layout.fragment_arrow_controls_xyz, container, false)
         binding.executePendingBindings()
 
+
+        repositoryForRobotApi = RepositoryForRobotApi()
         setClickListeners()
+
         return binding.root
     }
 
     private fun setClickListeners() {
-        binding.ibUpZ.setOnClickListener {
-            onButtonUpZClickListener()
-        }
+        // Move by Z
+        onButtonUpZClickListener()
+        onButtonDownZClickListener()
+
+        // Move by X
+        onButtonRightXClickListener()
+        onButtonLeftXClickListener()
+
+        // Move by Z
+        onButtonUpYClickListener()
+        onButtonDownYClickListener()
     }
 
     private fun onButtonUpZClickListener() {
-        repositoryForRobotApi = RepositoryForRobotApi()
-        repositoryForRobotApi.moveByZ(10)
-        repositoryForRobotApi.switchRobotOff()
+        binding.ibUpZ.setOnClickListener {
+            repositoryForRobotApi.moveByZ(100)
+        }
+    }
+
+    private fun onButtonDownZClickListener() {
+        binding.ibDownZ.setOnClickListener{
+            repositoryForRobotApi.moveByZ(-100)
+        }
+    }
+
+    private fun onButtonRightXClickListener() {
+        binding.ibRightX.setOnClickListener{
+            repositoryForRobotApi.moveByX(100)
+        }
+    }
+
+    private fun onButtonLeftXClickListener() {
+        binding.ibLeftX.setOnClickListener{
+            repositoryForRobotApi.moveByX(-100)
+        }
+    }
+
+    private fun onButtonUpYClickListener() {
+        binding.ibUpY.setOnClickListener {
+            repositoryForRobotApi.moveByY(100)
+        }
+    }
+
+    private fun onButtonDownYClickListener() {
+        binding.ibDownY.setOnClickListener{
+            repositoryForRobotApi.moveByY(-100)
+        }
+    }
+
+    override fun onDetach() {
+        repositoryForRobotApi.disconnect()
+        super.onDetach()
     }
 
     companion object {

@@ -1,24 +1,21 @@
-package link.client
+package ru.art241111.graphicaltoolforkawasaki.repository.robotAPI.link
 
-import link.State
 import java.io.IOException
 import java.io.PrintStream
 import java.net.Socket
 import java.net.UnknownHostException
 
-class TelnetClient(server: String,
-                   port: Int,
-                   private val user: String,
-                   private val password: String){
+class TelnetConnection(){
     private var socket: Socket = Socket()
-    var state = State.WAITING_COMMAND
 
-    init {
+    constructor(server: String,
+                port: Int,
+                user: String): this() {
         try {
             socket= Socket(server, port)
 
             if(socket.isConnected){
-                authorization()
+                authorization(user)
             }
         } catch (e: UnknownHostException){
             // TODO: Migrate to log
@@ -29,11 +26,10 @@ class TelnetClient(server: String,
         }
     }
 
-    fun getSocket(): Socket{
+    fun getSocket(): Socket {
         return socket
     }
 
-    //closes a this client. you may want to send command "exit" beforehand
     fun disconnect() {
         try {
             socket.close()
@@ -42,7 +38,7 @@ class TelnetClient(server: String,
         }
     }
 
-    private fun authorization(){
+    private fun authorization(user: String){
         val writer =  PrintStream(socket.getOutputStream())
 
         //TODO: Think about how to do it differently
