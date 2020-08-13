@@ -16,6 +16,7 @@ class KawasakiRobot(address: String = "127.0.0.1",
         thread {
             specifications.client = TelnetConnection(address,port,login)
             specifications.writer.startSendCommands()
+            service.turnOnTheMotors()
         }
     }
 
