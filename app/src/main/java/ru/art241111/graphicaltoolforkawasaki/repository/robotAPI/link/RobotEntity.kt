@@ -1,5 +1,6 @@
 package link
 
+import kawasakiRobots.handlersFromKawasakiRobots.CommandAnalyzerForKawasakiRobots
 import link.client.RemoteReader
 import link.client.RemoteWriter
 import link.client.TelnetClient
@@ -7,7 +8,7 @@ import utils.Delay
 import java.util.*
 import kotlin.concurrent.thread
 
-class RobotEntity(var client: TelnetClient) {
+class RobotEntity(client: TelnetClient) {
     val socket = client.getSocket()
 
     lateinit var writer: RemoteWriter
@@ -23,12 +24,15 @@ class RobotEntity(var client: TelnetClient) {
 
     init{
         if(socket.isConnected){
+            startQueueListener()
+
             writer = RemoteWriter(this)
             reader = RemoteReader(this)
 
-            reader.startReading()
+            // TODO: Think about how to make an entity independent
+            reader.startReading(CommandAnalyzerForKawasakiRobots(this))
 
-            startQueueListener()
+
         }
     }
 
@@ -41,7 +45,9 @@ class RobotEntity(var client: TelnetClient) {
     private fun startQueueListener(){
         thread {
             while (connection){
-                if((state == State.WAITING_COMMAND) and (!commandsQueue.isEmpty())){
+                if(state == State.ERROR){
+                    commandsQueue.clear()
+                } else if((state == State.WAITING_COMMAND) and (!commandsQueue.isEmpty())){
                     writer.write(commandsQueue.poll().trim())
                 }
                 Delay.little()

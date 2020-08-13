@@ -1,18 +1,23 @@
 package kawasakiRobots.utils
 
-import commandsProtocols.ServiceCommandIn
+import kawasakiRobots.commands.service.ServiceCommand.*
 import link.RobotEntity
+import link.State
 
-class Service(private var commands: ServiceCommandIn,
-              private var robotEntity: RobotEntity
-             ) {
-
+class Service(private var robotEntity: RobotEntity) {
     fun turnOnTheMotors() =
-            robotEntity.writer.write(commands.TURN_ON_THE_MOTORS())
+            robotEntity.writer.writeDependingStatus(TURN_ON_THE_MOTORS.command)
 
-    fun resetErrors() =
-            robotEntity.writer.write(commands.DELETE_ERRORS())
+    fun turnOffTheMotors() =
+            robotEntity.writer.writeDependingStatus(TURN_OFF_THE_MOTORS.command)
+
+    fun resetErrors(): Boolean{
+        robotEntity.errors.clear()
+        robotEntity.state = State.WAITING_COMMAND
+        return robotEntity.writer.writeDependingStatus(DELETE_ERRORS.command)
+    }
+
 
     fun updateInfoAboutPosition() = robotEntity.writer
-            .writeDependingStatus(commands.ROBOT_POSITION())
+            .writeDependingStatus(ROBOT_POSITION.command)
 }

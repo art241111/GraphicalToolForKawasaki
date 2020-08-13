@@ -1,9 +1,8 @@
 package kawasakiRobots.commands.service
 
-import commandsProtocols.ServiceCommandIn
-
-class ServiceCommand: ServiceCommandIn {
-    override fun TURN_ON_THE_MOTORS() = "ZPOW ON"
-    override fun DELETE_ERRORS(): String = "ERESET"
-    override fun ROBOT_POSITION(): String = "WHERE"
+enum class ServiceCommand(val command: String) {
+    TURN_ON_THE_MOTORS ("ZPOW ON"),
+    TURN_OFF_THE_MOTORS ("ZPOW OFF"),
+    DELETE_ERRORS ("ERESET"),
+    ROBOT_POSITION ("WHERE");
 }

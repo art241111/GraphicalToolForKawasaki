@@ -8,7 +8,6 @@ import java.io.PrintStream
 class RemoteWriter(private val robotEntity: RobotEntity) {
     private val socket = robotEntity.socket
     private var out = PrintStream(socket.getOutputStream())
-    private var countCommandsWithCallBack = 0
 
     fun write(message: String): Boolean {
         if(socket.isConnected){
@@ -34,12 +33,13 @@ class RemoteWriter(private val robotEntity: RobotEntity) {
         //  The status changes instantly and the queue
         //  does not have time
         Delay.middle()
-        robotEntity.state = State.COMMAND_EXECUTION
+        if (robotEntity.state != State.ERROR){
+            robotEntity.state = State.COMMAND_EXECUTION
+        }
 
         return res
     }
 
     fun writeDependingStatus(message: String):Boolean =
             robotEntity.commandsQueue.add(message)
-
 }
